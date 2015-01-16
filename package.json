@@ -1,0 +1,22 @@
+{
+  "name": "wol-forwarder",
+  "version": "1.0.0",
+  "author": "Morgan Courbet",
+  "keywords": [
+    "wake on lan",
+    "wol",
+    "server",
+    "magic packet"
+  ],
+  "description": "Server that waits for wake-on-lan/magic packets and broadcasts them on a defined network. Particulary handy when a router does not allow packet broadcasting from the Internet.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nagromc/wolforwarder.git"
+  },
+  "dependencies": {
+    "minimist": "1.1.x",
+    "mac-address": "0.3.x",
+    "validators": "0.3.x"
+  }
+}
+
