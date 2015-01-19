@@ -1,3 +1,5 @@
+"use strict";
+
 var dgram = require('dgram');
 var util = require('util');
 var macaddr = require('mac-address');
@@ -17,7 +19,7 @@ function magicPacketToString (msg) {
   beautifiedMsg = util.format('sync="%s" | ', macaddr.toString(msg.slice(0, macaddr.LENGTH)));
   
   for (var i = MGC_PKT_START_OFFSET; i < MGC_PKT_REPEAT_MAC_ADDR_NUMBER + MGC_PKT_START_OFFSET; i++) {
-    seq = macaddr.toString(msg.slice(macaddr.LENGTH * i, macaddr.LENGTH * (i + 1)));
+    var seq = macaddr.toString(msg.slice(macaddr.LENGTH * i, macaddr.LENGTH * (i + 1)));
 
     beautifiedMsg += util.format('seq%d="%s" | ', i, seq);
   }
