@@ -4,15 +4,60 @@ var dgram = require('dgram');
 var util = require('util');
 var macaddr = require('mac-address');
 var parseArgs = require('minimist');
+var validator = require('validator');
 
 
 
 var SYNC_SEQUENCE = macaddr.BROADCAST;
 var MGC_PKT_START_OFFSET = 1;
 var MGC_PKT_REPEAT_MAC_ADDR_NUMBER = 16;
+var START_SYSTEM_PORT = 0;
+var END_SYSTEM_PORT = 1023;
+var END_PORT = 65535;
 
 var server = dgram.createSocket('udp4');
 
+/**
+ * Check the input options and exit the program if at least one is wrong
+ * @param  {string[]} unknownOpts  list of options that are not supported
+ * @param  {string[]} validOptions list of the valid options
+ * @param  {Object[]} argv         list of the option values
+ */
+function validateOptions(unknownOpts, validOptions, argv) {
+    // check whether required options are given
+    if (unknownOpts.length > 0) {
+        util.error(util.format('The following options are unknown and will be ignored: %s. Available options are: %s', unknownOpts.join(', '), validOptions.join(', ')));
+    }
+
+    // control listeningHost
+    if (!validator.isIP(argv.listeningHost) && !validator.isFQDN(argv.listeningHost)) {
+        util.error(util.format('"%s" is not a valid host', argv.listeningHost));
+        process.exit(1);
+    }
+
+    // control listeningPort
+    if (!validator.isNumeric(argv.listeningPort) || !(argv.listeningPort >= START_SYSTEM_PORT && argv.listeningPort <= END_PORT)) {
+        util.error(util.format('The listening port ("%s") must be a number between %d and %d (or %d and %d if you have superuser privileges)', argv.listeningPort, END_SYSTEM_PORT + 1, END_PORT, START_SYSTEM_PORT, END_PORT));
+        process.exit(1);
+    }
+
+    // control forwardingNetwork
+    if (!validator.isIP(argv.forwardingNetwork) && !validator.isFQDN(argv.forwardingNetwork)) {
+        util.error(util.format('"%s" is not a valid host', argv.forwardingNetwork));
+        process.exit(1);
+    }
+
+    // control forwardingPort
+    if (!validator.isNumeric(argv.forwardingPort) || !(argv.forwardingPort >= START_SYSTEM_PORT && argv.forwardingPort <= END_PORT)) {
+        util.error(util.format('The forwarding port ("%s") must be a number between %d and %d', argv.forwardingPort, END_SYSTEM_PORT + 1, END_PORT));
+        process.exit(1);
+    }
+}
+
+/**
+ * Get the input arguments
+ * @return {Object.<string, Object>} list of the input arguments
+ */
 function getArgs() {
     var unknownOpts, options, argv;
 
@@ -38,9 +83,7 @@ function getArgs() {
 
     argv = parseArgs(process.argv.slice(2), options);
 
-    if (unknownOpts.length > 0) {
-        util.error(util.format('The following options are unknown and will be ignored: %s. Available options are: %s', unknownOpts.join(', '), Object.keys(options.alias).join(', ')));
-    }
+    validateOptions(unknownOpts, Object.keys(options.alias), argv);
 
     return argv;
 }
