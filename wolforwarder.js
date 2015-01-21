@@ -11,24 +11,39 @@ var SYNC_SEQUENCE = macaddr.BROADCAST;
 var MGC_PKT_START_OFFSET = 1;
 var MGC_PKT_REPEAT_MAC_ADDR_NUMBER = 16;
 
-var options = {
-    default: {
-        listeningHost: '0.0.0.0',
-        listeningPort: 9999,
-        forwardingNetwork: '255.255.255.255',
-        forwardingPort: 9
-    },
-    alias: {
-        listeningHost: 'h',
-        listeningPort: 'p',
-        forwardingNetwork: 'N',
-        forwardingPort: 'P'
-    }
-};
-var argv = parseArgs(process.argv.slice(2), options);
-
 var server = dgram.createSocket('udp4');
-server.bind(argv. listeningPort);
+
+function getArgs() {
+    var unknownOpts, options, argv;
+
+    unknownOpts = [];
+    options = {
+        default: {
+            listeningHost: '0.0.0.0',
+            listeningPort: 9999,
+            forwardingNetwork: '255.255.255.255',
+            forwardingPort: 9
+        },
+        alias: {
+            listeningHost: 'h',
+            listeningPort: 'p',
+            forwardingNetwork: 'N',
+            forwardingPort: 'P'
+        },
+        unknown: function (arg) {
+            unknownOpts.push(arg);
+            return false;
+        }
+    };
+
+    argv = parseArgs(process.argv.slice(2), options);
+
+    if (unknownOpts.length > 0) {
+        util.error(util.format('The following options are unknown and will be ignored: %s. Available options are: %s', unknownOpts.join(', '), Object.keys(options.alias).join(', ')));
+    }
+
+    return argv;
+}
 
 function magicPacketToString(msg) {
     var beautifiedMsg, i, seq;
@@ -75,6 +90,10 @@ function forwardMagicPacket(msg, host, port) {
         });
     });
 }
+
+var argv = getArgs();
+
+server.bind(argv.listeningPort, argv.listeningHost);
 
 server.on('error', function (err) {
     util.error('server error:\n' + err.stack);
