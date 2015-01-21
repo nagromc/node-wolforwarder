@@ -5,6 +5,7 @@ var util = require('util');
 var macaddr = require('mac-address');
 var parseArgs = require('minimist');
 var validator = require('validator');
+var isMac = require('is-mac');
 
 
 
@@ -117,6 +118,10 @@ function controlMagicPacket(msg) {
         if (seq !== prevSeq && i > 1) {
             throw new Error(util.format('The given magic packet does not repeat sixteen times the destination MAC address (expected "%s"; recieved "%s").', prevSeq, seq));
         }
+    }
+
+    if (!isMac(seq)) {
+        throw new Error(util.format('The given magic packet ("%s") is not a valid MAC address.', seq));
     }
 
     return seq;

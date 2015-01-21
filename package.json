@@ -16,7 +16,8 @@
   "dependencies": {
     "minimist": "1.1.x",
     "mac-address": "0.3.x",
-    "validator": "3.27.x"
+    "validator": "3.27.x",
+    "is-mac": "1.0.x"
   }
 }
 
