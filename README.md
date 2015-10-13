@@ -1,5 +1,5 @@
-`wolforwader`
-=============
+`wolforwarder`
+==============
 
 Server that waits for wake-on-lan/magic packets and broadcasts them on a defined network.
 
