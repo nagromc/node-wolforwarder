@@ -18,6 +18,9 @@
     "mac-address": "0.3.x",
     "validator": "3.27.x",
     "is-mac": "1.0.x"
+  },
+  "devDependencies": {
+    "jscs": "^3.0.3",
+    "jshint": "^2.9.2"
   }
 }
-
