@@ -14,10 +14,10 @@
     "url": "https://github.com/nagromc/wolforwarder.git"
   },
   "dependencies": {
-    "minimist": "1.1.x",
-    "mac-address": "0.3.x",
-    "validator": "3.27.x",
-    "is-mac": "1.0.x"
+    "is-mac": "^1.0.1",
+    "mac-address": "^0.3.0",
+    "minimist": "^1.2.0",
+    "validator": "^3.43.0"
   },
   "devDependencies": {
     "jscs": "^3.0.3",
