@@ -1,3 +1,5 @@
+(function() {
+
 "use strict";
 
 var dgram = require('dgram');
@@ -166,3 +168,5 @@ server.on('listening', function () {
     var address = server.address();
     util.log(util.format('Server listening on %s:%d. Magic packets will be forwarded to %s:%d', address.address, address.port, argv.forwardingNetwork, argv.forwardingPort));
 });
+
+})();
