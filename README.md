@@ -33,17 +33,12 @@ Run
 Options
 -------
 
-###`-h`, `--listeningHost`
-Set the host to listen to. Default: `0.0.0.0` (listen on all addresses of the server).
-
-###`-p`, `--listeningPort`
-Set the port to listen to. Default: `9999` (due to the [_well-known ports_](http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers#Well-known_ports) restrictions)
-
-###`-N`, `--forwardingNetwork`
-Set the network to forward the magic packet to. Default: `255.255.255.255`.
-
-###`-P`, `--forwardingPort`
-Set the port to forward the magic packet to. Default: `9`.
+Option | Description
+------ | -----------
+`-h`, `--listeningHost` | Set the host to listen to. Default: `0.0.0.0` (listen on all addresses of the server).
+`-p`, `--listeningPort` | Set the port to listen to. Default: `9999` (due to the [_well-known ports_](http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers#Well-known_ports) restrictions)
+`-N`, `--forwardingNetwork` | Set the network to forward the magic packet to. Default: `255.255.255.255`.
+`-P`, `--forwardingPort` | Set the port to forward the magic packet to. Default: `9`.
 
 Router configuration
 --------------------
