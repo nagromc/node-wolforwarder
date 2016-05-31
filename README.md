@@ -1,5 +1,5 @@
-`wolforwarder`
-==============
+`wol-forwarder.js`
+==================
 
 Server that waits for wake-on-lan/magic packets and broadcasts them on a defined network.
 
@@ -28,7 +28,7 @@ Usage
 
 Run
 
-    $ node wolforwarder.js
+    $ node wol-forwarder.js
 
 Options
 -------
@@ -43,5 +43,5 @@ Option | Description
 Router configuration
 --------------------
 
-With the default options, the router must be configured to route the inbound traffic on the port `9` to the server running `wolforwarder` on the port `9999`.
+With the default options, the router must be configured to route the inbound traffic on the port `9` to the server running `wol-forwarder.js` on the port `9999`.
 

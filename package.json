@@ -1,5 +1,5 @@
 {
-  "name": "wol-forwarder",
+  "name": "wol-forwarder.js",
   "version": "1.0.0",
   "author": "Morgan Courbet",
   "keywords": [
@@ -11,7 +11,7 @@
   "description": "Server that waits for wake-on-lan/magic packets and broadcasts them on a defined network. Particulary handy when a router does not allow packet broadcasting from the Internet.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nagromc/wolforwarder.git"
+    "url": "https://github.com/nagromc/wol-forwarder.js.git"
   },
   "dependencies": {
     "is-mac": "^1.0.1",
