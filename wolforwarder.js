@@ -28,17 +28,16 @@ var server = dgram.createSocket('udp4');
 function validateOptions(unknownOpts, validOptions, argv) {
   // check whether required options are given
   if (unknownOpts.length > 0) {
-    util.error(
-      util.format('The following options are unknown and will be ignored: %s. Available options are: %s',
-        unknownOpts.join(', '),
-        validOptions.join(', ')
-      )
+    console.error(
+      'The following options are unknown and will be ignored: %s. Available options are: %s',
+      unknownOpts.join(', '),
+      validOptions.join(', ')
     );
   }
 
   // control listeningHost
   if (!validator.isIP(argv.listeningHost) && !validator.isFQDN(argv.listeningHost)) {
-    util.error(util.format('"%s" is not a valid host', argv.listeningHost));
+    console.error('"%s" is not a valid host', argv.listeningHost);
     process.exit(1);
   }
 
@@ -47,22 +46,20 @@ function validateOptions(unknownOpts, validOptions, argv) {
     !validator.isNumeric(argv.listeningPort) ||
     !(argv.listeningPort >= START_SYSTEM_PORT && argv.listeningPort <= END_PORT)
   ) {
-    util.error(
-      util.format(
-        'The listening port ("%s") must be a number between %d and %d (or %d and %d if you have superuser privileges)',
-        argv.listeningPort,
-        END_SYSTEM_PORT + 1,
-        END_PORT,
-        START_SYSTEM_PORT,
-        END_PORT
-      )
+    console.error(
+      'The listening port ("%s") must be a number between %d and %d (or %d and %d if you have superuser privileges)',
+      argv.listeningPort,
+      END_SYSTEM_PORT + 1,
+      END_PORT,
+      START_SYSTEM_PORT,
+      END_PORT
     );
     process.exit(1);
   }
 
   // control forwardingNetwork
   if (!validator.isIP(argv.forwardingNetwork) && !validator.isFQDN(argv.forwardingNetwork)) {
-    util.error(util.format('"%s" is not a valid host', argv.forwardingNetwork));
+    console.error('"%s" is not a valid host', argv.forwardingNetwork);
     process.exit(1);
   }
 
@@ -71,13 +68,11 @@ function validateOptions(unknownOpts, validOptions, argv) {
     !validator.isNumeric(argv.forwardingPort) ||
     !(argv.forwardingPort >= START_SYSTEM_PORT && argv.forwardingPort <= END_PORT)
   ) {
-    util.error(
-      util.format(
-        'The forwarding port ("%s") must be a number between %d and %d',
-        argv.forwardingPort,
-        END_SYSTEM_PORT + 1,
-        END_PORT
-      )
+    console.error(
+      'The forwarding port ("%s") must be a number between %d and %d',
+      argv.forwardingPort,
+      END_SYSTEM_PORT + 1,
+      END_PORT
     );
     process.exit(1);
   }
@@ -135,7 +130,7 @@ function controlMagicPacket(msg) {
   var seq;
 
   var sync = macaddr.toString(msg.slice(0, macaddr.LENGTH));
-  if (sync !== SYNC_SEQUENCE) {
+  if (sync != SYNC_SEQUENCE) {
     throw new Error(
       util.format(
         'The given magic packet does not begin with a synchronization sequence (expected "%s"; recieved "%s").',
@@ -175,7 +170,7 @@ function forwardMagicPacket(msg, host, port) {
     client.setBroadcast(true);
     client.send(msg, 0, msg.length, port, host, function() {
       client.close();
-      util.log(util.format('Magic packet forwarded to %s:%d', host, port));
+      console.info('Magic packet forwarded to %s:%d', host, port);
     });
   });
 }
@@ -185,41 +180,37 @@ var argv = getArgs();
 server.bind(argv.listeningPort, argv.listeningHost);
 
 server.on('error', function(err) {
-  util.error('server error:\n' + err.stack);
+  console.error('server error:\n' + err.stack);
   server.close();
 });
 
 server.on('message', function(msg) {
-  util.debug('Received a message. Trying to parse the message as a magic packet: ' + magicPacketToString(msg));
+  console.log('Received a message. Trying to parse the message as a magic packet: ' + magicPacketToString(msg));
 
   var macAddrToWakeUp;
   try {
     macAddrToWakeUp = controlMagicPacket(msg);
   } catch (err) {
-    util.error('The message is not a magic packet. Message skipped. ' + err);
+    console.error('The message is not a magic packet. Message skipped. ' + err);
     return;
   }
-  util.log(
-    util.format(
-      'Trying to forward the magic packet (MAC address "%s") to %s:%d',
-      macAddrToWakeUp,
-      argv.forwardingNetwork,
-      argv.forwardingPort
-    )
+  console.log(
+    'Trying to forward the magic packet (MAC address "%s") to %s:%d',
+    macAddrToWakeUp,
+    argv.forwardingNetwork,
+    argv.forwardingPort
   );
   forwardMagicPacket(msg, argv.forwardingNetwork, argv.forwardingPort);
 });
 
 server.on('listening', function() {
   var address = server.address();
-  util.log(
-    util.format(
-      'Server listening on %s:%d. Magic packets will be forwarded to %s:%d',
-      address.address,
-      address.port,
-      argv.forwardingNetwork,
-      argv.forwardingPort
-    )
+  console.info(
+    'Server listening on %s:%d. Magic packets will be forwarded to %s:%d',
+    address.address,
+    address.port,
+    argv.forwardingNetwork,
+    argv.forwardingPort
   );
 });
 
