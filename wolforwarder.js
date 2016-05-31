@@ -9,12 +9,12 @@ var parseArgs = require('minimist');
 var validator = require('validator');
 var isMac = require('is-mac');
 
-var SYNC_SEQUENCE = macaddr.BROADCAST;
-var MGC_PKT_START_OFFSET = 1;
-var MGC_PKT_REPEAT_MAC_ADDR_NUMBER = 16;
-var START_SYSTEM_PORT = 0;
-var END_SYSTEM_PORT = 1023;
-var END_PORT = 65535;
+const SYNC_SEQUENCE = macaddr.BROADCAST;
+const MGC_PKT_START_OFFSET = 1;
+const MGC_PKT_REPEAT_MAC_ADDR_NUMBER = 16;
+const START_SYSTEM_PORT = 0;
+const END_SYSTEM_PORT = 1023;
+const END_PORT = 65535;
 
 var server = dgram.createSocket('udp4');
 
